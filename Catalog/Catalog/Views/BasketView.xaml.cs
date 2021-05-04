@@ -7,16 +7,14 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Catalog
+namespace Catalog.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Bind : ContentPage
+    public partial class BasketView : ContentPage
     {
-        public Bind()
+        public BasketView()
         {
             InitializeComponent();
-            BindingContext = new VeiwModelM();
-            
         }
     }
 }
