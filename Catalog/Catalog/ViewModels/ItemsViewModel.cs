@@ -1,71 +1,67 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using Catalog.Views;
-using Catalog.Model;
+using Catalog.Models;
 using Xamarin.Forms;
-
+using Catalog.Data;
 namespace Catalog.ViewModels
 {
-    class ItemsViewModel
+    public class ItemsViewModel : BaseViewModel
     {
-        public List<Item> ItemList { get; }
-
-
+        public ObservableCollection<Item> Items { get; set; }
+        public Command LoadItemsCommand { get; }
+        private Item _selectedItem;
+        public Command<Item> ItemTapped { get; }
         public ItemsViewModel()
         {
-            ItemList = new List<Item>();
+            Items = new ObservableCollection<Item>();
 
+            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-
-            for (int i = 0; i < 10; i++)
-            {
-                ItemList.Add
-                    (
-                    new Item() { 
-                        Id = $"{i}", 
-                        Text = $"Товар {i}", 
-                        Description = "asdhfath", 
-                        Img = new Image() { Scale = 0.5, HorizontalOptions = LayoutOptions.Start, Source = "ss.jpg", BackgroundColor = Color.Black, Margin = new Thickness(1, 1) } }
-
-                    );
-            }
-
+            
         }
-
-        public void LoadList(StackLayout stack)
+        public Item SelectedItem // Выбранный товар
         {
-            List<Grid> gg = new List<Grid>();
-
-
-
-            for (int i = 0; i < ItemList.Count; i++)
+            get => _selectedItem;
+            set
             {
-
-                gg.Add
-                    (
-                    new Grid()
-                    {
-                        BackgroundColor = Color.LightGray,
-                        Children =
-                        {
-                            new Label() { Text = ItemList[i].Text, Margin = new Thickness(150,10) },
-                            new Button() { Text = "Buy", Margin = new Thickness(250, 50, 5, 5) },
-                            new Label() { Text = ItemList[i].Description, Margin = new Thickness(270, 5, 5, 5) },
-                            ItemList[i].Img
-                        },
-
-
-
-                    }
-                    );
-                stack.Children.Add(gg[i]);
-
-
+                SetProperty(ref _selectedItem, value);
             }
-
         }
 
+        public void OnAppearing()
+        {
+            IsBusy = true;
+            SelectedItem = null;
+        }
+        async Task ExecuteLoadItemsCommand() //вызов на апдейт каталога
+        {
+            IsBusy = true;
+
+            try
+            {
+                Items.Clear();
+                var items = await DataStore.GetItemsAsync(true);
+                foreach (var item in items)
+                {
+                    Items.Add(item);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+        
 
     }
 }

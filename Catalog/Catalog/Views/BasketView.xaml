@@ -5,9 +5,18 @@
              Title="Корзина">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Frame BackgroundColor="#2196F3" Padding="0,10" CornerRadius="0">
+                <SearchBar Placeholder=""  />
+            </Frame>
+            <ScrollView>
+                <StackLayout x:Name="stacklay" >
+
+
+                </StackLayout>
+            </ScrollView>
+
+
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -12,13 +12,12 @@ namespace Catalog.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ItemsView : ContentPage
     {
-        private ItemsViewModel mod;
+        ItemsViewModel _viewModel;
         public ItemsView()
         {
             InitializeComponent();
 
-            mod = new ItemsViewModel();
-            mod.LoadList(stacklay);
+            BindingContext = _viewModel = new ItemsViewModel();
 
 
 

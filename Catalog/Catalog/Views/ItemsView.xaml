@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Catalog.Views.ItemsView"
-             xmlns:model="clr-namespace:Catalog.Model"
+             xmlns:model="clr-namespace:Catalog.Models"
              xmlns:local="clr-namespace:Catalog.ViewModels"
              Title="Каталог">
     
@@ -10,13 +10,32 @@
         <Frame BackgroundColor="#2196F3" Padding="0,10" CornerRadius="0">
             <SearchBar Placeholder=""  />
         </Frame>
-        <ScrollView>
-            <StackLayout x:Name="stacklay" >
 
-
-            </StackLayout>
-        </ScrollView>
-
+        <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <CollectionView x:Name="ItemsListView"
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0" x:DataType="model:Item" BackgroundColor="Aquamarine">
+                            <Label Text="{Binding Text}" 
+                            LineBreakMode="NoWrap" 
+                            Style="{DynamicResource ListItemTextStyle}" 
+                            FontSize="16"
+                            Margin="150,10"/>
+                            <Label Text="{Binding Description}" 
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="13"
+                            Margin="270, 5, 5, 5"/>
+                            <Image Source="{Binding Img}" Scale = "0.5" HorizontalOptions = "Start" BackgroundColor = "Black" Margin = "1,1"/>
+                            <Button Margin="270, 50, 5, 5" Text="Buy"></Button>
+                            
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
 
 
     </StackLayout>

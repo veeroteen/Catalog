@@ -6,14 +6,14 @@ using Xamarin.Forms;
 
 
 
-namespace Catalog.Model
+namespace Catalog.Models
 {
     public class Item
     {
         public string Id { get; set; }
         public string Text { get; set; }
         public string Description { get; set; }
-        public Image Img { get; set; }
+        public string Img { get; set; }
 
     }
 }

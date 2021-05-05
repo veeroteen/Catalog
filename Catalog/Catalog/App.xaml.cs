@@ -2,7 +2,7 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Catalog.Views;
-
+using Catalog.Data;
 namespace Catalog
 {
     public partial class App : Application
@@ -11,6 +11,7 @@ namespace Catalog
         {
             InitializeComponent();
 
+            DependencyService.Register<ItemData>();
             MainPage = new MainPage();
         }
 
