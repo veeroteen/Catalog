@@ -27,18 +27,12 @@ namespace Catalog.ViewModels
         
         public static void AddToBasket(Item item) 
         {
-            bool b = true;
-
-            var nn = from bitem in BasketItemList
-                     where bitem.Id == item.Id
-                     select bitem;
-            foreach (ItemsInBasket bitem in nn)
+            var BasketItem = BasketItemList.FirstOrDefault(bi => bi.Id == item.Id);
+            if(BasketItem != null) 
             {
-                bitem.Count++;
-                b = false;
+                BasketItem.Count++;
             }
-
-            if (b)
+            else
             {
                 BasketItemList.Add(new ItemsInBasket()
                 {
@@ -52,8 +46,6 @@ namespace Catalog.ViewModels
 
 
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
