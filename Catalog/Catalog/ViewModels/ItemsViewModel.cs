@@ -22,7 +22,11 @@ namespace Catalog.ViewModels
 
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            
+            ItemTapped = new Command<Item>(OnItemSelected);
+
+            ExecuteLoadItemsCommand();
+
+
         }
         public Item SelectedItem // Выбранный товар
         {
@@ -30,6 +34,8 @@ namespace Catalog.ViewModels
             set
             {
                 SetProperty(ref _selectedItem, value);
+                OnItemSelected(value);
+                
             }
         }
 
@@ -61,7 +67,13 @@ namespace Catalog.ViewModels
                 IsBusy = false;
             }
         }
-        
 
+        async void OnItemSelected(Item item)
+        {
+            if (item == null)
+                return;
+            BasketViewModel.AddToBasket(item);
+            
+        }
     }
 }

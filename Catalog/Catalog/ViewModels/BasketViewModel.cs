@@ -1,60 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Catalog.Views;
 using Catalog.Models;
 using Xamarin.Forms;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.ComponentModel;
+
 namespace Catalog.ViewModels
 {
-    static class BasketViewModel
+    public class BasketViewModel : INotifyPropertyChanged
     {
 
-        public static StackLayout stack;
-        public static List<Item> ItemList;
+        
+        public static ObservableCollection<ItemsInBasket> BasketItemList { get; set; } = BasketItemList = new ObservableCollection<ItemsInBasket>();
 
+        public BasketViewModel()
+        {
+            
+
+        }
+
+        
         public static void AddToBasket(Item item) 
         {
-            ItemList = new List<Item>();
-            ItemList.Add(item);
+            bool b = true;
 
-            List<Grid> gg = new List<Grid>();
-
-
-
-            for (int i = 0; i < ItemList.Count; i++)
+            var nn = from bitem in BasketItemList
+                     where bitem.Id == item.Id
+                     select bitem;
+            foreach (ItemsInBasket bitem in nn)
             {
-
-                gg.Add
-                    (
-                    new Grid()
-                    {
-                        BackgroundColor = Color.LightGray,
-                        Children =
-                        {
-                            new Label() { Text = ItemList[i].Text, Margin = new Thickness(150,10) },
-                            new Button() { Text = "Buy", Margin = new Thickness(250, 50, 5, 5) },
-                            new Label() { Text = ItemList[i].Description, Margin = new Thickness(270, 5, 5, 5) },
-
-                        },
-
-
-
-                    }
-                    );
-                stack.Children.Add(gg[i]);
-
-
+                bitem.Count++;
+                b = false;
             }
 
-
-
-
-
-
+            if (b)
+            {
+                BasketItemList.Add(new ItemsInBasket()
+                {
+                    Description = item.Description,
+                    Id = item.Id,
+                    Img = item.Img,
+                    Text = item.Text,
+                    Count = 1
+                });
+            }
 
 
         }
 
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var changed = PropertyChanged;
+            if (changed == null)
+                return;
+
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
     }
 }

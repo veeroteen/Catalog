@@ -18,7 +18,7 @@ namespace Catalog.Views
         {
            
             InitializeComponent();
-            BasketViewModel.stack = stacklay;
+
         }
     }
 }

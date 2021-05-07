@@ -2,18 +2,44 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Catalog.Views.BasketView"
+             xmlns:model="clr-namespace:Catalog.Models"
+             xmlns:local="clr-namespace:Catalog.ViewModels"
              Title="Корзина">
     <ContentPage.Content>
         <StackLayout>
             <Frame BackgroundColor="#2196F3" Padding="0,10" CornerRadius="0">
                 <SearchBar Placeholder=""  />
             </Frame>
-            <ScrollView>
-                <StackLayout x:Name="stacklay" >
-
-
-                </StackLayout>
-            </ScrollView>
+            <ContentView x:DataType="local:BasketViewModel">
+                <CollectionView x:Name="ItemsListView"
+                ItemsSource="{Binding BasketItemList}"
+                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="0" x:DataType="model:ItemsInBasket" BackgroundColor="Aquamarine">
+                            <Label Text="{Binding Text}" 
+                            LineBreakMode="NoWrap" 
+                            Style="{DynamicResource ListItemTextStyle}" 
+                            FontSize="16"
+                            Margin="150,10"/>
+                                <Label Text="{Binding Description}" 
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="13"
+                            Margin="270, 5, 5, 5"/>
+                                <Image Source="{Binding Img}" Scale = "0.5" HorizontalOptions = "Start" BackgroundColor = "Black" Margin = "1,1"/>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:BasketViewModel}}, Path=ItemTapped}"		
+                                        CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </Grid.GestureRecognizers>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ContentView>
 
 
 
