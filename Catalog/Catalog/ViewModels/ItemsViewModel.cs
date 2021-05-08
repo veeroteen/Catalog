@@ -15,6 +15,7 @@ namespace Catalog.ViewModels
         public ObservableCollection<Item> Items { get; set; }
         public Command LoadItemsCommand { get; }
         private Item _selectedItem;
+        public Command<Item> ItemBuy { get; }
         public Command<Item> ItemTapped { get; }
         public ItemsViewModel()
         {
@@ -23,6 +24,7 @@ namespace Catalog.ViewModels
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
             ItemTapped = new Command<Item>(OnItemSelected);
+            ItemBuy = new Command<Item>(OnItemBuy);
 
             ExecuteLoadItemsCommand();
 
@@ -67,13 +69,19 @@ namespace Catalog.ViewModels
                 IsBusy = false;
             }
         }
-
-        async void OnItemSelected(Item item)
+        void OnItemBuy(Item item)
         {
             if (item == null)
                 return;
             BasketViewModel.AddToBasket(item);
-            
+
+        }
+        async void OnItemSelected(Item item)
+        {
+            if (item == null)
+                return;
+            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+
         }
     }
 }

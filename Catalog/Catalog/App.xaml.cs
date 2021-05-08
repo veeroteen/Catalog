@@ -3,6 +3,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Catalog.Views;
 using Catalog.Data;
+using Catalog.Services;
+
 namespace Catalog
 {
     public partial class App : Application
