@@ -19,11 +19,12 @@
                     <DataTemplate>
                         <Grid BackgroundColor="Black" >
                             <Grid Margin="1,1,1,1" x:DataType="model:Item" BackgroundColor="LightGray">
-                                <Label Text="{Binding Text}" 
-                                        LineBreakMode="NoWrap" 
-                                        Style="{DynamicResource ListItemTextStyle}" 
-                                        FontSize="16"
-                                        Margin="5,0"/>
+                                <Label 
+                                    Text="{Binding Text}" 
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="16"
+                                    Margin="5,0"/>
                                 <Label Text="{Binding Description}" 
                                     LineBreakMode="NoWrap"
                                     Style="{DynamicResource ListItemDetailTextStyle}"

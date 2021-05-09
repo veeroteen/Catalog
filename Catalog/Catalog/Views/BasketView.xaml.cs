@@ -13,11 +13,12 @@ namespace Catalog.Views
     public partial class BasketView : ContentPage
     {
 
-        
+        BasketViewModel _viewModel;
         public BasketView()
         {
            
             InitializeComponent();
+            BindingContext = _viewModel = new BasketViewModel();
 
         }
     }

@@ -16,18 +16,35 @@
                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="0" x:DataType="model:ItemsInBasket" BackgroundColor="Aquamarine">
-                            <Label Text="{Binding Text}" 
-                            LineBreakMode="NoWrap" 
-                            Style="{DynamicResource ListItemTextStyle}" 
-                            FontSize="16"
-                            Margin="150,10"/>
-                                <Label Text="{Binding Description}" 
-                            LineBreakMode="NoWrap"
-                            Style="{DynamicResource ListItemDetailTextStyle}"
-                            FontSize="13"
-                            Margin="270, 5, 5, 5"/>
-                                <Image Source="{Binding Img}" Scale = "0.5" HorizontalOptions = "Start" BackgroundColor = "Black" Margin = "1,1"/>
+                            <Grid BackgroundColor="Black">
+                            <Grid Margin="1,1,1,1" Padding="0" x:DataType="model:ItemsInBasket" BackgroundColor="LightGray">
+                                <Label 
+                                    Text="{Binding Text}" 
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="16"
+                                    Margin="5,0"/>
+                                <Label 
+                                    Text="{Binding Description}" 
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemDetailTextStyle}"
+                                    FontSize="13"
+                                    Margin="100,30"/>
+                                <Label 
+                                    Text="{Binding Count}" 
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemDetailTextStyle}"
+                                    FontSize="13"
+                                    HorizontalOptions="End"
+                                    Margin="0,0,15,10"/>
+                                <Image 
+                                    Source="{Binding Img}"  
+                                    Margin="10,25,0,1" 
+                                    VerticalOptions="Start" 
+                                    HorizontalOptions="Start" 
+                                    WidthRequest="72" 
+                                    HeightRequest="72" 
+                                    BackgroundColor="LightGray" />
                                 <Grid.GestureRecognizers>
                                     <TapGestureRecognizer 
                                         NumberOfTapsRequired="1"
@@ -35,6 +52,7 @@
                                         CommandParameter="{Binding .}">
                                     </TapGestureRecognizer>
                                 </Grid.GestureRecognizers>
+                            </Grid>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

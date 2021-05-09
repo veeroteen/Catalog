@@ -17,11 +17,12 @@ namespace Catalog.ViewModels
 
         
         public static ObservableCollection<ItemsInBasket> BasketItemList { get; set; } = BasketItemList = new ObservableCollection<ItemsInBasket>();
+        public Command<Item> ItemTapped { get; }
 
         public BasketViewModel()
         {
-            
 
+            ItemTapped = new Command<Item>(OnItemSelected);
         }
 
         
@@ -56,6 +57,12 @@ namespace Catalog.ViewModels
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        async void OnItemSelected(Item item)
+        {
+            if (item == null)
+                return;
+            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
 
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace Catalog.Models
 {
     public class ItemsInBasket : Item
     {
-        public int Count;
+        public int Count { get; set; }
 
         public ItemsInBasket() 
         {
