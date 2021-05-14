@@ -22,9 +22,9 @@ namespace Catalog.Data
                    new Item()
                    {
                        Id = $"{i}",
-                       Text = $"Товар {i}",
-                       Description = "asdhfath",
-                       Img = "ss.jpg"
+                       Text = $"Наименование товара {i}",
+                       Description = "Описание",
+                       Img = "plug.png"
                    }
 
                    );

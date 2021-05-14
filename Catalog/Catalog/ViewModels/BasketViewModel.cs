@@ -9,6 +9,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Catalog.ViewModels
 {
@@ -17,18 +20,29 @@ namespace Catalog.ViewModels
 
         
         public static ObservableCollection<ItemsInBasket> BasketItemList { get; set; } = BasketItemList = new ObservableCollection<ItemsInBasket>();
+        public static Dictionary<string, ItemsInBasket> Items { get; set; } = new Dictionary<string, ItemsInBasket>();
         public Command<Item> ItemTapped { get; }
 
         public BasketViewModel()
         {
 
             ItemTapped = new Command<Item>(OnItemSelected);
+
+            if( Items.ContainsKey("1111"))
+            {
+                Items["11111"].Count++;
+            }
+            else
+            {
+                Items["1111"] = new ItemsInBasket { Count = 1 };
+            }
+
         }
 
         
         public static void AddToBasket(Item item) 
         {
-            var BasketItem = BasketItemList.FirstOrDefault(bi => bi.Id == item.Id);
+            var BasketItem = BasketItemList.FirstOrDefault(bi => bi.itm.Id == item.Id);
             if(BasketItem != null) 
             {
                 BasketItem.Count++;
@@ -37,14 +51,43 @@ namespace Catalog.ViewModels
             {
                 BasketItemList.Add(new ItemsInBasket()
                 {
-                    Description = item.Description,
-                    Id = item.Id,
-                    Img = item.Img,
-                    Text = item.Text,
+                    itm = item,
                     Count = 1
                 });
-            }
+                HttpResponseMessage response = null;
+                try
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        //пример обращения используя get запрос
+                        //response = await client.GetAsync("http://192.168.0.104:5000/weatherforecast");
+                        //пример обращения используя post запрос с передачей переменной встроенного типа (int)
+                        //response = await client.PostAsync("http://192.168.0.104:5000/weatherforecast", new StringContent("55", Encoding.UTF8,"application/json"));
 
+
+                        //пример обращения используя post запрос с передачей переменной сложного типа (Order)
+                        var order = new Order
+                        {
+                            ClientName = "Иванов Иван Иванович",
+                            Items = new[]
+                            {
+                            new ItemsInBasket { Count = 1, itm = item },
+
+                        }
+                        };
+                        var serializedData = JsonConvert.SerializeObject(order);
+                        response = await client.PostAsync("http://192.168.0.104:5000/Basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //какая то обработка
+
+                    Debug.WriteLine(ex);
+                    return;
+                }
+            }
+           
 
         }
 
