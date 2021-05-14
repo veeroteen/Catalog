@@ -12,7 +12,7 @@
             </Frame>
             <ContentView x:DataType="local:BasketViewModel">
                 <CollectionView x:Name="ItemsListView"
-                ItemsSource="{Static local:BasketViewModel.BasketItemList}"
+                ItemsSource="{Static local:BasketViewModel.Items}"
                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>

@@ -18,9 +18,8 @@ namespace Catalog.ViewModels
     public class BasketViewModel : INotifyPropertyChanged
     {
 
-        
-        public static ObservableCollection<ItemsInBasket> BasketItemList { get; set; } = BasketItemList = new ObservableCollection<ItemsInBasket>();
-        public static Dictionary<string, ItemsInBasket> Items { get; set; } = new Dictionary<string, ItemsInBasket>();
+      
+        public static ObservableCollection<ItemsInBasket> Items { get; set; } = new ObservableCollection<ItemsInBasket>();
         public Command<Item> ItemTapped { get; }
 
         public BasketViewModel()
@@ -28,66 +27,72 @@ namespace Catalog.ViewModels
 
             ItemTapped = new Command<Item>(OnItemSelected);
 
-            if( Items.ContainsKey("1111"))
-            {
-                Items["11111"].Count++;
-            }
-            else
-            {
-                Items["1111"] = new ItemsInBasket { Count = 1 };
-            }
+           
 
         }
 
         
-        public static void AddToBasket(Item item) 
+        public static async Task AddToBasket(Item item) 
         {
-            var BasketItem = BasketItemList.FirstOrDefault(bi => bi.itm.Id == item.Id);
-            if(BasketItem != null) 
+            HttpResponseMessage response = null;
+            var BasketItem = Items.FirstOrDefault(bi => bi.itm.Id == item.Id);
+            if (BasketItem == null)
             {
-                BasketItem.Count++;
-            }
-            else
-            {
-                BasketItemList.Add(new ItemsInBasket()
+                Items.Add(new ItemsInBasket()
                 {
                     itm = item,
                     Count = 1
+
                 });
-                HttpResponseMessage response = null;
-                try
+            }
+            else
+            {
+                Items.FirstOrDefault(bi => bi.itm.Id == item.Id).Count++;
+
+            }
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
                 {
-                    using (HttpClient client = new HttpClient())
+                    //пример обращения используя get запрос
+                    //response = await client.GetAsync("http://192.168.0.104:5000/weatherforecast");
+                    //пример обращения используя post запрос с передачей переменной встроенного типа (int)
+                    //response = await client.PostAsync("http://192.168.0.104:5000/weatherforecast", new StringContent("55", Encoding.UTF8,"application/json"));
+
+
+                    //пример обращения используя post запрос с передачей переменной сложного типа (Order)
+                    var order = new Order
                     {
-                        //пример обращения используя get запрос
-                        //response = await client.GetAsync("http://192.168.0.104:5000/weatherforecast");
-                        //пример обращения используя post запрос с передачей переменной встроенного типа (int)
-                        //response = await client.PostAsync("http://192.168.0.104:5000/weatherforecast", new StringContent("55", Encoding.UTF8,"application/json"));
-
-
-                        //пример обращения используя post запрос с передачей переменной сложного типа (Order)
-                        var order = new Order
+                        ClientName = "Иванов Иван Иванович",
+                        Items = new ItemsInBasket() 
                         {
-                            ClientName = "Иванов Иван Иванович",
-                            Items = new[]
-                            {
-                            new ItemsInBasket { Count = 1, itm = item },
-
+                            itm = item,
+                            Count = 1
                         }
-                        };
-                        var serializedData = JsonConvert.SerializeObject(order);
-                        response = await client.PostAsync("http://192.168.0.104:5000/Basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //какая то обработка
 
-                    Debug.WriteLine(ex);
-                    return;
+                    };
+                    var serializedData = JsonConvert.SerializeObject(order);
+                    response = await client.PostAsync("http://192.168.0.104:5000/Basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
                 }
             }
-           
+            catch (Exception ex)
+            {
+                //какая то обработка
+
+                Debug.WriteLine(ex);
+                return;
+            }
+            var messageContent = await response.Content.ReadAsStringAsync();
+
+            //десерилизуем, если в ответе ожиаем json:
+            var desearelizedOrder = JsonConvert.DeserializeObject<Order>(messageContent);
+
+
+            Items.Add(desearelizedOrder.Items);
+
+
+
 
         }
 

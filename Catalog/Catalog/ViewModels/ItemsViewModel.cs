@@ -72,15 +72,11 @@ namespace Catalog.ViewModels
                 IsBusy = false;
             }
         }
-        void OnItemBuy(Item item)
+        async void OnItemBuy(Item item)
         {
             if (item == null)
                 return;
-            BasketViewModel.AddToBasket(item);
-
-        }
-        async void OnItemSelected(Item item)
-        {
+            await BasketViewModel.AddToBasket(item);
             HttpResponseMessage response = null;
             try
             {
@@ -93,18 +89,14 @@ namespace Catalog.ViewModels
 
 
                     //пример обращения используя post запрос с передачей переменной сложного типа (Order)
-                    var order = new Order
+                    var order = new Order() 
                     {
+                 
+                        
                         ClientName = "Иванов Иван Иванович",
-                        Items = new[]
-                        {
-                            new ItemsInBasket { Count = 4, Id = "1" },
-                            new ItemsInBasket { Count = 1, Id = "2" },
-                            new ItemsInBasket { Count = 2, Id = "3" },
-                        }
                     };
                     var serializedData = JsonConvert.SerializeObject(order);
-                    response = await client.PostAsync("http://192.168.0.104:5000/Basket", new StringContent(serializedData, Encoding.UTF8,"application/json"));
+                    response = await client.PostAsync("http://192.168.0.104:5000/Basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
                 }
             }
             catch (Exception ex)
@@ -114,10 +106,11 @@ namespace Catalog.ViewModels
                 Debug.WriteLine(ex);
                 return;
             }
-            var messageContent = await response.Content.ReadAsStringAsync();
-
-            //десерилизуем, если в ответе ожиаем json:
-            var desearelizedOrder = JsonConvert.DeserializeObject<Order>(messageContent);
+            
+        }
+        async void OnItemSelected(Item item)
+        {
+            
           
 
             if (item == null)
