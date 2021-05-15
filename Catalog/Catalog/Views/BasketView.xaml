@@ -7,9 +7,7 @@
              Title="Корзина">
     <ContentPage.Content>
         <StackLayout>
-            <Frame BackgroundColor="#2196F3" Padding="0,10" CornerRadius="0">
-                <SearchBar Placeholder=""  />
-            </Frame>
+            <Grid>
             <ContentView x:DataType="local:BasketViewModel">
                 <CollectionView x:Name="ItemsListView"
                 ItemsSource="{Static local:BasketViewModel.Items}"
@@ -19,13 +17,13 @@
                             <Grid BackgroundColor="Black">
                             <Grid Margin="1,1,1,1" Padding="0" x:DataType="model:ItemsInBasket" BackgroundColor="LightGray">
                                 <Label 
-                                    Text="{Binding itm.Text}" 
+                                    Text="{Binding item.Text}" 
                                     LineBreakMode="NoWrap" 
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="16"
                                     Margin="5,0"/>
                                 <Label 
-                                    Text="{Binding itm.Description}" 
+                                    Text="{Binding item.Description}" 
                                     LineBreakMode="NoWrap"
                                     Style="{DynamicResource ListItemDetailTextStyle}"
                                     FontSize="13"
@@ -38,7 +36,7 @@
                                     HorizontalOptions="End"
                                     Margin="0,0,15,10"/>
                                 <Image 
-                                    Source="{Binding itm.Img}"  
+                                    Source="{Binding item.Img}"  
                                     Margin="10,25,0,1" 
                                     VerticalOptions="Start" 
                                     HorizontalOptions="Start" 
@@ -59,8 +57,17 @@
                 </CollectionView>
             </ContentView>
 
-
-
+                <Button 
+                    BackgroundColor="White" 
+                    Text="B" 
+                    FontSize="25"  
+                    WidthRequest="50"
+                    HeightRequest="50" 
+                    Margin="100,100,15,15"
+                    HorizontalOptions="End"  
+                    VerticalOptions="End"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:BasketViewModel}}, Path=PostOrder}"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -8,7 +8,7 @@ namespace Catalog.Models
     {
         public int Count { get; set; }
 
-        public Item itm { get; set; }
+        public Item item { get; set; }
 
 
         public ItemsInBasket() 

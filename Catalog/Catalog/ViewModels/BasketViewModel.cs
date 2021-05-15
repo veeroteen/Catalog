@@ -21,12 +21,12 @@ namespace Catalog.ViewModels
       
         public static ObservableCollection<ItemsInBasket> Items { get; set; } = new ObservableCollection<ItemsInBasket>();
         public Command<Item> ItemTapped { get; }
-
+        public Command PostOrder { get; }
         public BasketViewModel()
         {
 
             ItemTapped = new Command<Item>(OnItemSelected);
-
+            PostOrder = new Command(OnOrderClick);
            
 
         }
@@ -34,23 +34,33 @@ namespace Catalog.ViewModels
         
         public static async Task AddToBasket(Item item) 
         {
-            HttpResponseMessage response = null;
-            var BasketItem = Items.FirstOrDefault(bi => bi.itm.Id == item.Id);
+            
+            var BasketItem = Items.FirstOrDefault(bi => bi.item.Id == item.Id);
             if (BasketItem == null)
             {
                 Items.Add(new ItemsInBasket()
                 {
-                    itm = item,
+                    item = item,
                     Count = 1
 
                 });
             }
             else
             {
-                Items.FirstOrDefault(bi => bi.itm.Id == item.Id).Count++;
+                Items.FirstOrDefault(bi => bi.item.Id == item.Id).Count++;
 
             }
+            await PostBusket(item);
 
+
+
+
+        }
+
+
+        public static async Task PostBusket(Item itm)
+        {
+            HttpResponseMessage response = null;
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -62,18 +72,14 @@ namespace Catalog.ViewModels
 
 
                     //пример обращения используя post запрос с передачей переменной сложного типа (Order)
-                    var order = new Order
+                    var quest = new Order
                     {
                         ClientName = "Иванов Иван Иванович",
-                        Items = new ItemsInBasket() 
-                        {
-                            itm = item,
-                            Count = 1
-                        }
+                        Items = itm
 
                     };
-                    var serializedData = JsonConvert.SerializeObject(order);
-                    response = await client.PostAsync("http://192.168.0.104:5000/Basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
+                    var serializedData = JsonConvert.SerializeObject(quest);
+                    response = await client.PostAsync("http://192.168.0.104:5000/basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
                 }
             }
             catch (Exception ex)
@@ -87,14 +93,10 @@ namespace Catalog.ViewModels
 
             //десерилизуем, если в ответе ожиаем json:
             var desearelizedOrder = JsonConvert.DeserializeObject<Order>(messageContent);
-
-
-            Items.Add(desearelizedOrder.Items);
-
-
-
+            
 
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -112,5 +114,46 @@ namespace Catalog.ViewModels
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
 
         }
+        async void OnOrderClick()
+        {
+
+            await PostOrderAsync();
+
+        }
+        public static async Task PostOrderAsync() 
+        {
+
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    //пример обращения используя get запрос
+                    //response = await client.GetAsync("http://192.168.0.104:5000/weatherforecast");
+                    //пример обращения используя post запрос с передачей переменной встроенного типа (int)
+                    //response = await client.PostAsync("http://192.168.0.104:5000/weatherforecast", new StringContent("55", Encoding.UTF8,"application/json"));
+
+
+                    //пример обращения используя post запрос с передачей переменной сложного типа (Order)
+                    
+                    var serializedData = JsonConvert.SerializeObject(Items);
+                    await client.PostAsync("http://192.168.0.104:5000/weatherforecast", new StringContent(serializedData, Encoding.UTF8, "application/json"));
+                }
+            }
+            catch (Exception ex)
+            {
+                //какая то обработка
+
+                Debug.WriteLine(ex);
+                return;
+            }
+            
+
+            
+
+
+        }
+
+
     }
 }

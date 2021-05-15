@@ -110,9 +110,6 @@ namespace Catalog.ViewModels
         }
         async void OnItemSelected(Item item)
         {
-            
-          
-
             if (item == null)
                 return;
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
