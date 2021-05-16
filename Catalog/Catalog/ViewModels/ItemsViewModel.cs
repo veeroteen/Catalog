@@ -115,5 +115,31 @@ namespace Catalog.ViewModels
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
 
         }
+        async void LoadItemList(int lower, int upper)//Запрос итемов, не сделан бинд и команда
+        {
+            Items.Clear();
+            HttpResponseMessage response = null;
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    int[] quest = { lower, upper };
+
+                    var serializedData = JsonConvert.SerializeObject(quest);
+                    response = await client.PostAsync("http://192.168.0.104:5000/Basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
+                }
+            }
+            catch (Exception ex)
+            {
+                //какая то обработка
+
+                Debug.WriteLine(ex);
+                return;
+            }
+            var messageContent = await response.Content.ReadAsStringAsync();
+
+            //десерилизуем, если в ответе ожиаем json:
+            Items = JsonConvert.DeserializeObject<ObservableCollection<Item>>(messageContent);
+        }
     }
 }

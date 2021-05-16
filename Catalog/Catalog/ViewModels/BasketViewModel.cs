@@ -50,17 +50,7 @@ namespace Catalog.ViewModels
                 Items.FirstOrDefault(bi => bi.item.Id == item.Id).Count++;
 
             }
-            await PostBusket(item);
 
-
-
-
-        }
-
-
-        public static async Task PostBusket(Item itm)
-        {
-            HttpResponseMessage response = null;
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -72,14 +62,14 @@ namespace Catalog.ViewModels
 
 
                     //пример обращения используя post запрос с передачей переменной сложного типа (Order)
-                    var quest = new Order
+                    var quest = new ItemBuy
                     {
-                        ClientName = "Иванов Иван Иванович",
-                        Items = itm
-
+                        IDProduct = item.Id,
+                        IDUser = "1"
                     };
+
                     var serializedData = JsonConvert.SerializeObject(quest);
-                    response = await client.PostAsync("http://192.168.0.104:5000/basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
+                    await client.PostAsync("http://192.168.0.104:5000/basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
                 }
             }
             catch (Exception ex)
@@ -89,13 +79,10 @@ namespace Catalog.ViewModels
                 Debug.WriteLine(ex);
                 return;
             }
-            var messageContent = await response.Content.ReadAsStringAsync();
-
-            //десерилизуем, если в ответе ожиаем json:
-            var desearelizedOrder = JsonConvert.DeserializeObject<Order>(messageContent);
-            
 
         }
+
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;

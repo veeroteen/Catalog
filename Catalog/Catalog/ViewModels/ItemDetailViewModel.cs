@@ -5,6 +5,8 @@ using Catalog.Models;
 using Xamarin.Forms;
 using System;
 using System.Diagnostics;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Catalog.ViewModels
 {
@@ -16,7 +18,7 @@ namespace Catalog.ViewModels
         private string text;
         private string description;
         public string Id { get; set; }
-
+        public ItemDetail Item { get; set; }
         public string Text
         {
             get => text;
@@ -46,10 +48,25 @@ namespace Catalog.ViewModels
         {
             try
             {
-                var item = await DataStore.GetItemAsync(itemId);
-                Id = item.Id;
-                Text = item.Text;
-                Description = item.Description;
+                Item.item = await DataStore.GetItemAsync(itemId);
+                HttpResponseMessage response = null;
+                using (HttpClient client = new HttpClient())
+                {
+                        //пример обращения используя get запрос
+                        //response = await client.GetAsync("http://192.168.0.104:5000/weatherforecast");
+                        //пример обращения используя post запрос с передачей переменной встроенного типа (int)
+                        //response = await client.PostAsync("http://192.168.0.104:5000/weatherforecast", new StringContent("55", Encoding.UTF8,"application/json"));
+
+
+                        //пример обращения используя post запрос с передачей переменной сложного типа (Order)
+                        
+                        var serializedData = JsonConvert.SerializeObject(itemId);
+                        response = await client.PostAsync("http://192.168.0.104:5000/basket", new StringContent(serializedData, Encoding.UTF8, "application/json"));
+                        var messageContent = await response.Content.ReadAsStringAsync();
+                    Item.Detail = JsonConvert.DeserializeObject<ItemDetailDescription>(messageContent);
+                }
+                
+                
             }
             catch (Exception)
             {
