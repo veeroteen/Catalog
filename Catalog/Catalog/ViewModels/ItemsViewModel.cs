@@ -20,6 +20,7 @@ namespace Catalog.ViewModels
         private Item _selectedItem;
         public Command<Item> ItemBuy { get; }
         public Command<Item> ItemTapped { get; }
+        public static bool logged = false;
         public ItemsViewModel()
         {
             Items = new ObservableCollection<Item>();
@@ -30,8 +31,10 @@ namespace Catalog.ViewModels
             ItemBuy = new Command<Item>(OnItemBuy);
 
             ExecuteLoadItemsCommand();
-
-
+            if (!logged)
+            {
+                Shell.Current.GoToAsync("//Login");
+            }
         }
         public Item SelectedItem // Выбранный товар
         {
@@ -48,6 +51,7 @@ namespace Catalog.ViewModels
         {
             IsBusy = true;
             SelectedItem = null;
+            
         }
         async Task ExecuteLoadItemsCommand() //вызов на апдейт каталога
         {

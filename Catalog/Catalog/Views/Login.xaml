@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Catalog.Views.Login"
+             Shell.NavBarIsVisible="False">
+    
+    <ContentPage.Content>
+        <Grid BackgroundColor="LightGray">
+            <Label Text="Log in" FontSize="20" TextColor="Black" HorizontalOptions="Center" Margin="0,20"/>
+            <Entry x:Name="LoginE" Placeholder="Login"  VerticalOptions="Start"  Margin="8,60,8,0"/>
+            <Entry x:Name="PassordE" Placeholder="Password" VerticalOptions="Start"  Margin="8,100,8,0"/>
+            <Button Text="Enter"   Margin="80,150,200,440" Clicked="LoginClick" HorizontalOptions="Center"/>
+            <Button Text="Register"    Margin="190,150,90,440" Clicked="RegisterClick" HorizontalOptions="Center"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

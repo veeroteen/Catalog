@@ -17,5 +17,9 @@ namespace Catalog
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
 
         }
+        private async void OnMenuItemClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//Login");
+        }
     }
 }

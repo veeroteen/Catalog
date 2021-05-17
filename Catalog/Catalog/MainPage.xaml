@@ -61,15 +61,24 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-
+    
     <FlyoutItem Title="Каталог" Icon="icon_about.png">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:ItemsView}" />
+        <ShellContent Route="ItemsView" ContentTemplate="{DataTemplate local:ItemsView}" />
     </FlyoutItem>
     <FlyoutItem Title="Корзина" Icon="icon_feed.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:BasketView }" />
     </FlyoutItem>
 
-    
+
+    <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
+    </MenuItem>
+    <TabBar>
+        <ShellContent Route="Login" ContentTemplate="{DataTemplate local:Login}" />
+    </TabBar>
+
+
+
+
 </Shell>
 
 

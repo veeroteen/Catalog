@@ -12,9 +12,8 @@ namespace Catalog
         public App()
         {
             InitializeComponent();
-
-            DependencyService.Register<ItemData>();
             MainPage = new MainPage();
+            //DependencyService.Register<ItemData>();
         }
 
         protected override void OnStart()
@@ -28,5 +27,8 @@ namespace Catalog
         protected override void OnResume()
         {
         }
+
+
+
     }
 }
