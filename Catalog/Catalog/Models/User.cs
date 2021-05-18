@@ -6,7 +6,7 @@ namespace Catalog.Models
 {
     public class User
     {
-        public static string ID { get; set; }
+        public static string ID { get; set; } = "1";
 
 
 

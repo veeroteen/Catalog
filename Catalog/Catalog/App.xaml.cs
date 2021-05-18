@@ -13,7 +13,7 @@ namespace Catalog
         {
             InitializeComponent();
             MainPage = new MainPage();
-            //DependencyService.Register<ItemData>();
+            DependencyService.Register<ItemData>();
         }
 
         protected override void OnStart()

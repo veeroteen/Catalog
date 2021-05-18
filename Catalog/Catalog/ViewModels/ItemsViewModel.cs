@@ -20,7 +20,7 @@ namespace Catalog.ViewModels
         private Item _selectedItem;
         public Command<Item> ItemBuy { get; }
         public Command<Item> ItemTapped { get; }
-        public static bool logged = false;
+        public static bool logged = true;
         public ItemsViewModel()
         {
             Items = new ObservableCollection<Item>();
@@ -81,6 +81,7 @@ namespace Catalog.ViewModels
             if (item == null)
                 return;
             await BasketViewModel.AddToBasket(item);
+            /*
             HttpResponseMessage response = null;
             try
             {
@@ -110,7 +111,7 @@ namespace Catalog.ViewModels
                 Debug.WriteLine(ex);
                 return;
             }
-            
+            */
         }
         async void OnItemSelected(Item item)
         {

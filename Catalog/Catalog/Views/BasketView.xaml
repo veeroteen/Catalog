@@ -17,13 +17,13 @@
                             <Grid BackgroundColor="Black">
                             <Grid Margin="1,1,1,1" Padding="0" x:DataType="model:ItemsInBasket" BackgroundColor="LightGray">
                                 <Label 
-                                    Text="{Binding item.Text}" 
+                                    Text="{Binding Text}" 
                                     LineBreakMode="NoWrap" 
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="16"
                                     Margin="5,0"/>
                                 <Label 
-                                    Text="{Binding item.Description}" 
+                                    Text="{Binding Description}" 
                                     LineBreakMode="NoWrap"
                                     Style="{DynamicResource ListItemDetailTextStyle}"
                                     FontSize="13"
@@ -36,7 +36,7 @@
                                     HorizontalOptions="End"
                                     Margin="0,0,15,10"/>
                                 <Image 
-                                    Source="{Binding item.Img}"  
+                                    Source="{Binding Img}"  
                                     Margin="10,25,0,1" 
                                     VerticalOptions="Start" 
                                     HorizontalOptions="Start" 

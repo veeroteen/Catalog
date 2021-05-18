@@ -27,30 +27,30 @@ namespace Catalog.ViewModels
 
             ItemTapped = new Command<Item>(OnItemSelected);
             PostOrder = new Command(OnOrderClick);
-           
+            LoadBasket();
 
         }
 
         
         public static async Task AddToBasket(Item item) 
         {
-            
-            var BasketItem = Items.FirstOrDefault(bi => bi.item.Id == item.Id);
+            /*
+            var BasketItem = Items.FirstOrDefault(bi => bi.Id == item.Id);
             if (BasketItem == null)
             {
                 Items.Add(new ItemsInBasket()
                 {
-                    item = item,
+                    
                     Count = 1
 
                 });
             }
             else
             {
-                Items.FirstOrDefault(bi => bi.item.Id == item.Id).Count++;
+                Items.FirstOrDefault(bi => bi.Id == item.Id).Count++;
 
             }
-
+            */
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -62,10 +62,10 @@ namespace Catalog.ViewModels
 
 
                     //пример обращения используя post запрос с передачей переменной сложного типа (Order)
-                    var quest = new ItemBuy
+                    var quest = new Order
                     {
                         IDProduct = item.Id,
-                        IDUser = "1"
+                        ClientID = User.ID,
                     };
 
                     var serializedData = JsonConvert.SerializeObject(quest);
@@ -79,7 +79,7 @@ namespace Catalog.ViewModels
                 Debug.WriteLine(ex);
                 return;
             }
-
+            await LoadBasket();
         }
 
 
@@ -123,8 +123,8 @@ namespace Catalog.ViewModels
 
                     //пример обращения используя post запрос с передачей переменной сложного типа (Order)
                     
-                    var serializedData = JsonConvert.SerializeObject(Items);
-                    await client.PostAsync("http://192.168.0.104:5000/weatherforecast", new StringContent(serializedData, Encoding.UTF8, "application/json"));
+                    var serializedData = JsonConvert.SerializeObject(User.ID);
+                    await client.PostAsync("http://192.168.0.104:5000/order", new StringContent(serializedData, Encoding.UTF8, "application/json"));
                 }
             }
             catch (Exception ex)
@@ -140,6 +140,44 @@ namespace Catalog.ViewModels
 
 
         }
+
+        public async static Task LoadBasket()
+        {
+            Items.Clear();
+            HttpResponseMessage response = null;
+
+            try
+            {
+                
+                using (HttpClient client = new HttpClient())
+                {
+
+                    
+                    var serializedData = JsonConvert.SerializeObject(User.ID);
+                    response = await client.PostAsync("http://192.168.0.104:5000/basketload", new StringContent(serializedData, Encoding.UTF8, "application/json"));
+
+                    var messageContent = await response.Content.ReadAsStringAsync();
+
+                    string s = "1";
+                    s = s + messageContent;
+                    var f = JsonConvert.DeserializeObject<ItemsInBasket>(messageContent);
+                    
+                        Items.Add(f);
+
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                //какая то обработка
+
+                Debug.WriteLine(ex);
+                return;
+            }
+
+
+        }
+
 
 
     }

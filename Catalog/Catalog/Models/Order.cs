@@ -7,7 +7,12 @@ namespace Catalog.Models
 {
     public class Order
     {
-        public string ClientName { get; set; }
-        public Item Items { get; set; }
+        public string ClientID { get; set; }
+        public string IDProduct { get; set; }
+
+
+
+
+
     }
 }
